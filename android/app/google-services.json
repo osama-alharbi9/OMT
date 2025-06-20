@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "697432999713",
+    "project_id": "omt-5d93d",
+    "storage_bucket": "omt-5d93d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697432999713:android:8e8e8b6d2f27e0c8cba060",
+        "android_client_info": {
+          "package_name": "com.example.omt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeP5xnFQPdSiDFOyN6X9HYix8mU5UPpf8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

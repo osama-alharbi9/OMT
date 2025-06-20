@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:omt/main.dart';
 
 class SignIn extends StatelessWidget {
   const SignIn({super.key});
@@ -6,7 +7,11 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: null
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Text('data');
+        },
+      ),
     );
   }
 }
