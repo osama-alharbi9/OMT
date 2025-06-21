@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
-  primaryColor: Color(0xFFFFFFFF),
+  primaryColor: Color(0xFFFFEB3B), // Brand Yellow
   scaffoldBackgroundColor: Color(0xFFFFFFFF),
   colorScheme: const ColorScheme.light(
-    primary: Color(0xFFFFFFFF),
+    primary: Color(0xFFFFEB3B),       // Brand Yellow
     onPrimary: Color(0xFF000000),
     secondary: Color(0xFFB0B0B0),
     onSecondary: Color(0xFF000000),
