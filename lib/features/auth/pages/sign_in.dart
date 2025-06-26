@@ -1,11 +1,15 @@
 
 import 'dart:io';
+import 'package:delightful_toast/delight_toast.dart';
+import 'package:delightful_toast/toast/components/toast_card.dart';
+import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:omt/core/common/helpers/helper_functions.dart';
 import 'package:omt/core/common/widgets/omt_button.dart';
 import 'package:omt/features/auth/providers/auth_provider.dart';
 import 'package:omt/features/auth/widgets/omt_text_field.dart';
@@ -43,7 +47,16 @@ class _SignInState extends ConsumerState<SignIn> {
       
       final authFunctionsProvider = ref.read(authProvider.notifier);
       try {
-        await authFunctionsProvider.signIn(name, password);
+        if(!signUp){
+          await authFunctionsProvider.signIn(name,email, password);
+        }
+        
+        else {
+          await authFunctionsProvider.createNewUser(name, email, password);
+        }
+      
+        
+        
       } catch (e) {
         setState(() {
           isLoading=false;
@@ -99,7 +112,7 @@ class _SignInState extends ConsumerState<SignIn> {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                ),OmtTextField(
+                                  ),OmtTextField(
                         validator: (value) {
                           if(value!.isEmpty||value==null){
                             return 
@@ -112,7 +125,7 @@ class _SignInState extends ConsumerState<SignIn> {
                           name = value;
                         },
                       ),SizedBox(height: 16.h,)
-
+                  
                     ],
                       Align(
                   alignment: Alignment.centerLeft,
@@ -122,7 +135,7 @@ class _SignInState extends ConsumerState<SignIn> {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                ),
+                                  ),
                       OmtTextField(
                         validator: (value) {
                           if(value!.isEmpty||value==null){
@@ -133,7 +146,7 @@ class _SignInState extends ConsumerState<SignIn> {
                         suffixIcon: Icon(Icons.email),
                         hintText: 'Enter your name',
                         onSaved: (value) {
-                          name = value;
+                          email = value;
                         },
                       ),
                       SizedBox(height: 16.h),
@@ -178,7 +191,10 @@ class _SignInState extends ConsumerState<SignIn> {
                               ),
                         ),
                       ),
-                      SizedBox(height: 45),
+                      
+                    ],
+                  ),
+                ),SizedBox(height: 45),
                       OmtButton(isLoading: isLoading,
                         onPressed: () async {
                           await _submitForm();
@@ -242,9 +258,6 @@ class _SignInState extends ConsumerState<SignIn> {
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
