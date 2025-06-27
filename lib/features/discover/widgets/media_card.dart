@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omt/core/common/helpers/helper_functions.dart';
-import 'package:omt/features/discover/models/media_item.dart';
+import 'package:omt/features/discover/models/media_model.dart';
 import 'package:omt/features/discover/pages/media_details.dart';
 
 class MediaCard extends StatelessWidget {
@@ -11,7 +11,7 @@ class MediaCard extends StatelessWidget {
     required this.mediaName,
     required this.posterPath,
   });
-  final MediaItem mediaItem;
+  final MediaModel mediaItem;
   final String mediaName;
   final String posterPath;
   @override

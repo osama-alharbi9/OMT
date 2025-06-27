@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:omt/features/discover/models/media_item.dart';
+import 'package:omt/features/discover/models/media_model.dart';
 import 'package:omt/features/discover/pages/all_media.dart';
-import 'package:omt/features/discover/widgets/movie_card.dart';
+import 'package:omt/features/discover/widgets/media_card.dart';
 
-class MoviesSection extends StatelessWidget {
-  const MoviesSection({super.key, required this.label, required this.media});
+class MediaSection extends StatelessWidget {
+  const MediaSection({super.key, required this.label, required this.media});
 
   final String label;
-  final List<MediaItem?> media;
+  final List<MediaModel?> media;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,9 @@ class MoviesSection extends StatelessWidget {
             separatorBuilder: (_, __) => SizedBox(width: 8.w),
             itemBuilder: (context, index) {
               final item = media[index];
-              print(item!.posterPath!);
+                if (item == null) {
+                return const SizedBox.shrink();
+                }
               return MediaCard(mediaItem: item, mediaName: item.title,posterPath: item.posterPath!,);
             },
           ),

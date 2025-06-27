@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:omt/features/discover/models/media_item.dart';
+import 'package:omt/features/discover/models/media_model.dart';
 import 'package:omt/features/discover/providers/dio_provider.dart';
 
-class MediaProvider extends StateNotifier<Map<String, List<MediaItem?>>> {
+class MediaProvider extends StateNotifier<Map<String, List<MediaModel?>>> {
   MediaProvider(this.ref) : super({});
   final Ref ref;
 
@@ -24,17 +24,17 @@ class MediaProvider extends StateNotifier<Map<String, List<MediaItem?>>> {
     final List onTheAirTv = response[4].data['results'];
 
     state = {
-      'trendingAll': trendingAll.map((json) => MediaItem.fromJson(json)).toList(),
-      'popularMovies': popularMovies.map((json) => MediaItem.fromJson(json)).toList(),
-      'popularTv': popularTv.map((json) => MediaItem.fromJson(json)).toList(),
-      'nowPlayingMovies': nowPlayingMovies.map((json) => MediaItem.fromJson(json)).toList(),
-      'onTheAirTv': onTheAirTv.map((json) => MediaItem.fromJson(json)).toList(),
+      'trendingAll': trendingAll.map((json) => MediaModel.fromJson(json,'')).toList(),
+      'popularMovies': popularMovies.map((json) => MediaModel.fromJson(json,'movie')).toList(),
+      'popularTv': popularTv.map((json) => MediaModel.fromJson(json,'tv')).toList(),
+      'nowPlayingMovies': nowPlayingMovies.map((json) => MediaModel.fromJson(json,'movie')).toList(),
+      'onTheAirTv': onTheAirTv.map((json) => MediaModel.fromJson(json,'tv')).toList(),
     };
 
     print(trendingAll);
   }
 }
 
-final mediaProvider = StateNotifierProvider<MediaProvider, Map<String, List<MediaItem?>>>(
+final mediaProvider = StateNotifierProvider<MediaProvider, Map<String, List<MediaModel?>>>(
   (ref) => MediaProvider(ref),
 );

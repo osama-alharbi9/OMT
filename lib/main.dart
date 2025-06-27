@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omt/config/themes/dark_theme.dart';
 import 'package:omt/config/themes/light_theme.dart';
 import 'package:omt/core/common/helpers/helper_functions.dart';
-import 'package:omt/features/discover/pages/movies_page.dart';
 import 'package:omt/features/auth/pages/sign_in.dart';
 import 'package:omt/features/auth/providers/auth_provider.dart';
 import 'package:omt/firebase_options.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:omt/features/discover/pages/movies_page.dart';
+import 'package:omt/features/discover/pages/discover_page.dart';
 import 'package:omt/features/profile/pages/profile_page.dart';
 import 'package:omt/features/search/search_page.dart';
 import 'package:omt/features/shows/shows_page.dart';
@@ -15,15 +15,13 @@ class OmtNavigator extends StatefulWidget {
 
 class _OmtNavigatorState extends State<OmtNavigator> {
   final List<Widget> _pages = const [
-    MoviesPage(),
-    ShowsPage(),
+    DiscoverPage(),
     SearchPage(),
     ProfilePage(),
   ];
 
   final List<String> iconPaths = [
-    'assets/images/navigator/movies.png',
-    'assets/images/navigator/shows.png',
+    'assets/images/navigator/discover.png',
     'assets/images/navigator/search.png',
     'assets/images/navigator/profile.png',
   ];

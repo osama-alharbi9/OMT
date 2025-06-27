@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:omt/features/discover/models/media_item.dart';
-import 'package:omt/features/discover/widgets/movie_card.dart';
+import 'package:omt/features/discover/models/media_model.dart';
+import 'package:omt/features/discover/widgets/media_card.dart';
 
 class AllMedia extends StatelessWidget {
   const AllMedia({super.key, required this.media});
-  final List<MediaItem?> media;
+  final List<MediaModel?> media;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

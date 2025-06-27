@@ -1,7 +1,7 @@
 import 'package:uuid/uuid.dart';
 
 const uuid=Uuid();
-class MediaItem {
+class MediaModel {
   final int id;
   final String title;
   final String overview;
@@ -17,7 +17,7 @@ class MediaItem {
   final String mediaType;
   final String? uid;
 
-  MediaItem({
+  MediaModel({
     required this.id,
     required this.title,
     required this.overview,
@@ -33,8 +33,8 @@ class MediaItem {
     required this.mediaType,
   }):uid=uuid.v4();
 
-  factory MediaItem.fromJson(Map<String, dynamic> json) {
-    return MediaItem(
+  factory MediaModel.fromJson(Map<String, dynamic> json,String mediaType) {
+    return MediaModel(
       id: json['id'],
       title: json['title'] ?? json['name'] ?? json['original_title'] ?? json['original_name'] ?? '',
       overview: json['overview'] ?? '',
@@ -47,10 +47,7 @@ class MediaItem {
       originalLanguage: json['original_language'] ?? '',
       originCountry: List<String>.from(json['origin_country'] ?? []),
       popularity: (json['popularity'] ?? 0).toDouble(),
-      mediaType: json['media_type'] ?? 'unknown',
+      mediaType: json['media_type'] ?? mediaType,
     );
   }
-
-  bool get isMovie => mediaType == 'movie';
-  bool get isTvShow => mediaType == 'tv';
 }
