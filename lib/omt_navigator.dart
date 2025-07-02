@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omt/features/discover/pages/discover_page.dart';
 import 'package:omt/features/profile/pages/profile_page.dart';
 import 'package:omt/features/search/search_page.dart';
-import 'package:omt/features/shows/shows_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class OmtNavigator extends StatefulWidget {

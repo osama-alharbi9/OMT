@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-final ThemeData darkTheme = ThemeData(
+final ThemeData darkTheme = ThemeData(fontFamily: GoogleFonts.inter().fontFamily,
   brightness: Brightness.dark,
   primaryColor: Color(0xFFFFEB3B), // Brand Yellow
   scaffoldBackgroundColor: Color(0xFF000000),
@@ -14,9 +15,11 @@ final ThemeData darkTheme = ThemeData(
     error: Color(0xFFFF0000),
     onError: Color(0xFFFFFFFF),
     brightness: Brightness.dark,
+    
   ),
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Color(0xFFFFFFFF)),
+    
+    bodyLarge: TextStyle(color: Color(0xFFFFFFFF),letterSpacing: -0.5),
     bodyMedium: TextStyle(color: Color(0xFFFFFFFF)),
   ),
 );
