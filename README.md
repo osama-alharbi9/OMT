@@ -1,16 +1,30 @@
-# omt
+# OMT – Media Recommendation App
 
-A new Flutter project.
+OMT is a Flutter-based mobile application that recommends movies and TV shows based on user preferences and interaction history. Inspired by Tinder-style flashcards, users can swipe right to save content to their watchlist or left to dismiss.
 
-## Getting Started
+Built with a clean, scalable Feature-First architecture, powered by Riverpod, and integrated with Firebase and TMDB API, OMT delivers a smooth, intuitive experience on both Android and iOS.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Personalized recommendations based on user watch history  
+- Swipe-based UI using animated flashcards  
+- Real-time watchlist sync with Firebase Firestore  
+- Search and discover trending or popular titles  
+- Supports dark mode and system theme  
+- Clean and modular project structure
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Project Structure
+
+lib/
+├── features/
+│   ├── home/
+│   ├── watchlist/
+│   ├── discover/
+│   └── auth/
+├── core/
+│   ├── theme/
+│   ├── constants/
+│   └── utils/
+└── main.dart
