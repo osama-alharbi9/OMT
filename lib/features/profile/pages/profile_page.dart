@@ -1,12 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:omt/features/auth/providers/auth_provider.dart';
+import 'package:omt/features/discover/models/media_model.dart';
+import 'package:omt/features/discover/providers/list_provider.dart';
 import 'package:omt/features/discover/widgets/media_section.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authFunctionsProvider = ref.read(authProvider.notifier);
+    final userLists = ref.watch(listProvider);
     List<Map<String, dynamic>> _stats = [
       {'Episodes Watched': 2543},
       {'Movies Watched': 120},
@@ -16,6 +23,14 @@ class ProfilePage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            actions: [
+              IconButton(
+                onPressed: () {
+                  authFunctionsProvider.signOut(context);
+                },
+                icon: Icon(CupertinoIcons.gear_alt),
+              ),
+            ],
             title: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -109,10 +124,46 @@ class ProfilePage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  MediaSection(label: 'Favorites List', media: []),
-                  MediaSection(label: 'Shows', media: []),
-                  MediaSection(label: 'Movies', media: []),
-                  MediaSection(label: 'Omt Suggestions', media: []),
+                  FutureBuilder(
+                    future: authFunctionsProvider.getUserLists(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      }
+                      final userLists = snapshot.data;
+                      return Column(
+  children: [
+    MediaSection(
+      label: 'Favorites List',
+      media: (userLists!['favourites'] ?? [])
+          .map<MediaModel>((e) => MediaModel.fromJson(e,''))
+          .toList(),
+    ),
+    MediaSection(
+      label: 'Shows',
+      media: (userLists['shows'] ?? [])
+          .map<MediaModel>((e) => MediaModel.fromJson(e,'tv'))
+          .toList(),
+    ),
+    MediaSection(
+      label: 'Movies',
+      media: (userLists['movies'] ?? [])
+          .map<MediaModel>((e) => MediaModel.fromJson(e,'movie'))
+          .toList(),
+    ),
+    MediaSection(
+      label: 'Watchlist',
+      media: (userLists['watchlist'] ?? [])
+          .map<MediaModel>((e) => MediaModel.fromJson(e,'')).toList()
+          .toList(),
+    ),
+  ],
+);
+                    },
+                  ),
                 ],
               ),
             ),

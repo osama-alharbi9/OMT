@@ -50,4 +50,19 @@ class MediaModel {
       mediaType: json['media_type'] ?? mediaType,
     );
   }
+  Map<String,dynamic> toJson()=> {
+    'id': id,
+    'title': title,
+    'overview': overview,
+    'poster_path': posterPath,
+    'backdrop_path': backdropPath,
+    'vote_average': voteAverage,
+    'vote_count': voteCount,
+    'genre_ids': genreIds,
+    'release_date': releaseDate,
+    'original_language': originalLanguage,
+    'origin_country': originCountry,
+    'popularity': popularity,
+    'media_type': mediaType,
+  };
 }

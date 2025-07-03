@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:omt/core/common/helpers/helper_functions.dart';
+import 'package:omt/features/discover/models/media_model.dart';
 
 class AuthProvider extends StateNotifier<User?> {
   AuthProvider([FirebaseAuth? auth, FirebaseFirestore? database])
@@ -15,6 +16,7 @@ class AuthProvider extends StateNotifier<User?> {
   }
   FirebaseAuth _auth;
   FirebaseFirestore _dataBase;
+  FirebaseFirestore get dataBase=>_dataBase;
   Future<void> signIn(String name, String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -22,6 +24,8 @@ class AuthProvider extends StateNotifier<User?> {
       showToast('signed');
       final userDoc =
           await _dataBase.collection('users').doc(_auth.currentUser!.uid).get();
+      final userList =
+          await _dataBase.collection('lists').doc(_auth.currentUser!.uid).get();
       print('signed in ');
 
       if (!userDoc.exists) {
@@ -30,10 +34,18 @@ class AuthProvider extends StateNotifier<User?> {
           'email': email,
         });
       }
+      if (!userList.exists) {
+        await _dataBase.collection('lists').doc(_auth.currentUser!.uid).set({
+          'favourites': [],
+          'shows': [],
+          'movies': [],
+          'watchlist': [],
+        });
+      }
     } on FirebaseAuthException catch (e) {
       print(e.message);
       state = null;
-      showToast('Error',isError: true);
+      showToast('Error', isError: true);
     }
   }
 
@@ -44,7 +56,16 @@ class AuthProvider extends StateNotifier<User?> {
         password: password,
       );
       if (_auth.currentUser != null) {
-        _dataBase.collection('users').doc().set({'name': name, 'email': email});
+        _dataBase.collection('users').doc(_auth.currentUser!.uid).set({
+          'name': name,
+          'email': email,
+        });
+        _dataBase.collection('lists').doc(_auth.currentUser!.uid).set({
+          'favourites': [],
+          'shows': [],
+          'movies': [],
+          'watchlist': [],
+        });
         showToast('user created');
       }
     } on FirebaseAuthException catch (e) {
@@ -60,6 +81,17 @@ class AuthProvider extends StateNotifier<User?> {
       state = null;
     } on FirebaseAuthException catch (e) {
       print(e.message);
+    }
+  }
+
+  Future<Map<String, List<dynamic>>> getUserLists() async {
+    try {
+      final userLists =
+          await _dataBase.collection('lists').doc(_auth.currentUser!.uid).get();
+      return userLists.data() as Map<String, List<MediaModel>>;
+    } catch (e) {
+      print(e);
+      return {};
     }
   }
 }

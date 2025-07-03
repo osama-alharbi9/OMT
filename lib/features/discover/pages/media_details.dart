@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:omt/core/common/helpers/helper_functions.dart';
 import 'package:omt/features/discover/models/media_model.dart';
 import 'package:omt/features/discover/providers/cast_provider.dart';
+import 'package:omt/features/discover/providers/list_provider.dart';
 import 'package:omt/features/discover/providers/media_provider.dart';
 
 class MediaDetails extends ConsumerStatefulWidget {
@@ -176,7 +177,14 @@ class _MediaDetailsState extends ConsumerState<MediaDetails> {
                               ),
                               height: 60.sp,
                               width: 60.sp,
-                              child: Icon(CupertinoIcons.heart, size: 40.sp),
+                              child: GestureDetector(
+                                onTap: () async{
+                                   ref
+                                      .read(listProvider.notifier)
+                                      .toggleFavourite(widget.media);
+                                },
+                                child: Icon(CupertinoIcons.heart, size: 40.sp),
+                              ),
                             ),
                           ],
                         ),
