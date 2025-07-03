@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:omt/core/common/helpers/helper_functions.dart';
 import 'package:omt/features/discover/models/media_model.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthProvider extends StateNotifier<User?> {
   AuthProvider([FirebaseAuth? auth, FirebaseFirestore? database])
@@ -46,6 +47,22 @@ class AuthProvider extends StateNotifier<User?> {
       print(e.message);
       state = null;
       showToast('Error', isError: true);
+    }
+  }
+  Future<void> appleSignIn(BuildContext context) async {
+    try {
+      final appleUser = await SignInWithApple.getAppleIDCredential(scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName
+      ]);
+      final oAuthCredential = OAuthProvider('apple.com').credential(
+          idToken: appleUser.identityToken,
+          accessToken: appleUser.authorizationCode);
+      final userCredential = await _auth.signInWithCredential(oAuthCredential);
+      state = userCredential.user;
+      print('Sign in with Apple: ${state!.displayName}');
+    } catch (e) {
+      print(e);
     }
   }
 
