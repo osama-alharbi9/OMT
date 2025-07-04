@@ -31,7 +31,7 @@ class MediaProvider extends StateNotifier<Map<String, List<MediaModel?>>> {
       'onTheAirTv': onTheAirTv.map((json) => MediaModel.fromJson(json,'tv')).toList(),
     };
 
-    print(trendingAll);
+   // print(trendingAll);
   }
 }
 

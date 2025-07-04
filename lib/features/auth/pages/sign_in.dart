@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -23,59 +22,52 @@ class _SignInState extends ConsumerState<SignIn> {
   String email = '';
   String password = '';
   bool isLoading = false;
-  bool signUp=false;
-  bool obscureText=true;
-
-
-
+  bool signUp = false;
+  bool obscureText = true;
 
   Future<void> _submitForm() async {
     setState(() {
-      isLoading=true;
+      isLoading = true;
     });
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      
+
       final authFunctionsProvider = ref.read(authProvider.notifier);
       try {
-        if(!signUp){
-          await authFunctionsProvider.signIn(name,email, password);
-        }
-        
-        else {
+        if (!signUp) {
+          await authFunctionsProvider.signIn(name, email, password);
+        } else {
           await authFunctionsProvider.createNewUser(name, email, password);
         }
-      
-        
-        
       } catch (e) {
         setState(() {
-          isLoading=false;
+          isLoading = false;
         });
         print(e);
       }
     }
     setState(() {
-      isLoading=false;
+      isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-          final authFunctionsProvider = ref.read(authProvider.notifier);
+    final authFunctionsProvider = ref.read(authProvider.notifier);
 
     final media = MediaQuery.of(context);
     final height = media.size.height;
     final width = media.size.width;
-      final Map<String,Function>logosPath = {
-    if(Platform.isIOS)
-    'assets/images/apple.png':(){
-      authFunctionsProvider.appleSignIn(context);
-    },
-    'assets/images/google.png':(){},
-    'assets/images/x.png':(){},
-  }
-  ;
+    final Map<String, Function> logosPath = {
+      if (Platform.isIOS)
+        'assets/images/apple.png': () {
+          authFunctionsProvider.appleSignIn(context);
+        },
+      'assets/images/google.png': () {
+        authFunctionsProvider.googleSignIn(context);
+      },
+      'assets/images/x.png': () {},
+    };
 
     return Scaffold(
       body: SizedBox.expand(
@@ -100,49 +92,47 @@ class _SignInState extends ConsumerState<SignIn> {
                   ),
                 ),
                 SizedBox(height: 35),
-                
+
                 SizedBox(height: 4),
                 Form(
                   key: _formKey,
                   child: Column(
-                    children: [if(signUp)...[
-                                            Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Name',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
+                    children: [
+                      if (signUp) ...[
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Name',
+                            style: Theme.of(context).textTheme.bodyLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
                         ),
-                  ),
-                                  ),OmtTextField(
-                        validator: (value) {
-                          if(value!.isEmpty||value==null){
-                            return 
-                            'Please enter your name';
-                          }
-                        },
-                        suffixIcon: Icon(Icons.person),
-                        hintText: 'Enter your name',
-                        onSaved: (value) {
-                          name = value;
-                        },
-                      ),SizedBox(height: 16.h,)
-                  
-                    ],
+                        OmtTextField(
+                          validator: (value) {
+                            if (value!.isEmpty || value == null) {
+                              return 'Please enter your name';
+                            }
+                          },
+                          suffixIcon: Icon(Icons.person),
+                          hintText: 'Enter your name',
+                          onSaved: (value) {
+                            name = value;
+                          },
+                        ),
+                        SizedBox(height: 16.h),
+                      ],
                       Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Email',
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Email',
+                          style: Theme.of(context).textTheme.bodyLarge!
+                              .copyWith(fontWeight: FontWeight.bold),
                         ),
-                  ),
-                                  ),
+                      ),
                       OmtTextField(
                         validator: (value) {
-                          if(value!.isEmpty||value==null){
-                            return 
-                            'Please enter your name';
+                          if (value!.isEmpty || value == null) {
+                            return 'Please enter your name';
                           }
                         },
                         suffixIcon: Icon(Icons.email),
@@ -160,21 +150,26 @@ class _SignInState extends ConsumerState<SignIn> {
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      OmtTextField(validator: (value){
-                        if(value!.isEmpty||value==null){
-                          return 'Please enter your password';
-                        }
-                      },
-                        obscureText: obscureText,
-                        suffixIcon: GestureDetector(onTap: (){
-                          setState(() {
-                            obscureText=!obscureText;
-                          });
-                          print(obscureText);
+                      OmtTextField(
+                        validator: (value) {
+                          if (value!.isEmpty || value == null) {
+                            return 'Please enter your password';
+                          }
                         },
-                          child: Icon(obscureText
-                                          ? CupertinoIcons.eye_slash
-                                          : CupertinoIcons.eye)),
+                        obscureText: obscureText,
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              obscureText = !obscureText;
+                            });
+                            print(obscureText);
+                          },
+                          child: Icon(
+                            obscureText
+                                ? CupertinoIcons.eye_slash
+                                : CupertinoIcons.eye,
+                          ),
+                        ),
                         hintText: '••••••••',
                         onSaved: (value) {
                           password = value;
@@ -188,80 +183,112 @@ class _SignInState extends ConsumerState<SignIn> {
                           style: Theme.of(
                             context,
                           ).textTheme.bodyLarge!.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       ),
-                      
                     ],
                   ),
-                ),SizedBox(height: 45),
-                      OmtButton(isLoading: isLoading,
-                        onPressed: () async {
-                          await _submitForm();
+                ),
+                SizedBox(height: 45),
+                OmtButton(
+                  isLoading: isLoading,
+                  onPressed: () async {
+                    await _submitForm();
+                  },
+                  text: 'Log in',
+                ),
+                SizedBox(height: 45),
+                GestureDetector(
+                  onTap: () {},
+                  child: Text(
+                    'Or, sign up with',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge!.copyWith(letterSpacing: -0.8),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 16,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          authFunctionsProvider.appleSignIn(context);
                         },
-                        text: 'Log in',
-                      ),
-                      SizedBox(height: 45),
-                      GestureDetector(onTap: () {
-                        
-                      },
-                        child: Text(
-                          'Or, sign up with',
-                          style: Theme.of(
+                        child: CircleAvatar(
+                          radius: 20.r,
+                          backgroundColor: Theme.of(
                             context,
-                          ).textTheme.bodyLarge!.copyWith(letterSpacing: -0.8),
+                          ).colorScheme.onSurface.withOpacity(0.1),
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Image.asset(
+                              'assets/images/apple.png',
+                              width: 25.sp,
+                            ),
+                          ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          for (final logo in logosPath.keys) ...[
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 16,
-                              ),
-                              child: GestureDetector(onTap: (){logosPath.values.first();},
-                                child: CircleAvatar(
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
-                                  child: FittedBox(
-                                    fit: BoxFit.fitWidth,
-                                    child: Image.asset(logo, width: 25.sp),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 16,
                       ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Don’t have an account? ',
-                              style: Theme.of(
-                                context,
-                              ).textTheme.bodyMedium!.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                  ),
+                      child: GestureDetector(
+                        onTap: () {
+                          authFunctionsProvider.googleSignIn(context);
+                        },
+                        child: CircleAvatar(
+                          radius: 20.r,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withOpacity(0.1),
+                          child: FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Image.asset(
+                              'assets/images/google.png',
+                              width: 25.sp,
                             ),
-                            TextSpan(recognizer:TapGestureRecognizer()..onTap=(){
-                              setState(() {
-                                signUp=!signUp;
-                              });
-                              print(signUp);
-                            },
-                              text:signUp?'Sign In': 'Sign Up ',
-                              style: Theme.of(context).textTheme.bodyMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),SizedBox(height: 45.h,)
+                      ),
+                    ),
+                  ],
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Don’t have an account? ',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      TextSpan(
+                        recognizer:
+                            TapGestureRecognizer()
+                              ..onTap = () {
+                                setState(() {
+                                  signUp = !signUp;
+                                });
+                                print(signUp);
+                              },
+                        text: signUp ? 'Sign In' : 'Sign Up ',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 45.h),
               ],
             ),
           ),

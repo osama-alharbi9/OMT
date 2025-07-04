@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omt/core/common/helpers/helper_functions.dart';
 import 'package:omt/features/discover/models/media_model.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -15,9 +16,11 @@ class AuthProvider extends StateNotifier<User?> {
       state = user;
     });
   }
-  FirebaseAuth _auth;
-  FirebaseFirestore _dataBase;
+  final FirebaseAuth _auth;
+ final FirebaseFirestore _dataBase;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   FirebaseFirestore get dataBase=>_dataBase;
+
   Future<void> signIn(String name, String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -65,6 +68,32 @@ class AuthProvider extends StateNotifier<User?> {
       print(e);
     }
   }
+  Future<void> googleSignIn(BuildContext context) async {
+
+    try {
+final googleUser = await _googleSignIn.signIn(); 
+     if (googleUser == null) {
+        print('Google Sign-In canceled');
+
+        return;
+      }
+      final googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await _auth.signInWithCredential(credential);
+      state = userCredential.user;
+      print('Signed in with Google: ${state?.displayName}');
+    } catch (e) {
+      print('Google Sign-In failed: $e');
+
+      if (context.mounted) {
+        showToast('Google Sign in faild: $e',isError: true);
+      }
+    }
+  }
 
   Future<void> createNewUser(String name, String email, String password) async {
     try {
@@ -101,11 +130,12 @@ class AuthProvider extends StateNotifier<User?> {
     }
   }
 
-  Future<Map<String, List<dynamic>>> getUserLists() async {
+  Future<Map<String,List>> getUserLists() async {
     try {
       final userLists =
           await _dataBase.collection('lists').doc(_auth.currentUser!.uid).get();
-      return userLists.data() as Map<String, List<MediaModel>>;
+      final data = userLists.data() ?? {'': []};
+      return data.map((key, value) => MapEntry(key, List<dynamic>.from(value)));
     } catch (e) {
       print(e);
       return {};

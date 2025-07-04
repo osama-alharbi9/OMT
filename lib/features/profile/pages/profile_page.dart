@@ -15,7 +15,7 @@ class ProfilePage extends ConsumerWidget {
     final authFunctionsProvider = ref.read(authProvider.notifier);
     final userLists = ref.watch(listProvider);
     List<Map<String, dynamic>> _stats = [
-      {'Episodes Watched': 2543},
+      {'Episodes Watched': userLists['shows']?.length??0},
       {'Movies Watched': 120},
       {'Total Hours': 25235},
     ];
@@ -134,34 +134,66 @@ class ProfilePage extends ConsumerWidget {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       }
                       final userLists = snapshot.data;
-                      return Column(
-  children: [
-    MediaSection(
-      label: 'Favorites List',
-      media: (userLists!['favourites'] ?? [])
-          .map<MediaModel>((e) => MediaModel.fromJson(e,''))
-          .toList(),
-    ),
-    MediaSection(
-      label: 'Shows',
-      media: (userLists['shows'] ?? [])
-          .map<MediaModel>((e) => MediaModel.fromJson(e,'tv'))
-          .toList(),
-    ),
-    MediaSection(
-      label: 'Movies',
-      media: (userLists['movies'] ?? [])
-          .map<MediaModel>((e) => MediaModel.fromJson(e,'movie'))
-          .toList(),
-    ),
-    MediaSection(
-      label: 'Watchlist',
-      media: (userLists['watchlist'] ?? [])
-          .map<MediaModel>((e) => MediaModel.fromJson(e,'')).toList()
-          .toList(),
-    ),
-  ],
-);
+                      print(userLists);
+                      return (userLists!.isEmpty || userLists == null)
+                          ? Center(
+                            child: const Text(
+                              'You haven\'t added any movies or shows to your favourites or watchlist yet.\nStart exploring and save what you love!',
+                            ),
+                          )
+                          : Column(
+                            children: [
+                              if ((userLists?['favourites'] as List?)
+                                      ?.isNotEmpty ??
+                                  false)
+                                MediaSection(
+                                  label: 'Favorites List',
+                                  media:
+                                      (userLists!['favourites'] ?? [])
+                                          .map<MediaModel>(
+                                            (e) => MediaModel.fromJson(e, ''),
+                                          )
+                                          .toList(),
+                                ),
+                              if ((userLists?['shows'] as List?)?.isNotEmpty ??
+                                  false)
+                                MediaSection(
+                                  label: 'Shows',
+                                  media:
+                                      (userLists!['shows'] ?? [])
+                                          .map<MediaModel>(
+                                            (e) => MediaModel.fromJson(e, 'tv'),
+                                          )
+                                          .toList(),
+                                ),
+                              if ((userLists?['movies'] as List?)?.isNotEmpty ??
+                                  false)
+                                MediaSection(
+                                  label: 'Movies',
+                                  media:
+                                      (userLists!['movies'] ?? [])
+                                          .map<MediaModel>(
+                                            (e) =>
+                                                MediaModel.fromJson(e, 'movie'),
+                                          )
+                                          .toList(),
+                                ),
+                              if ((userLists?['watchlist'] as List?)
+                                      ?.isNotEmpty ??
+                                  false)
+                                MediaSection(
+                                  label: 'Watchlist',
+                                  media:
+                                      (userLists!['watchlist'] ?? [])
+                                          .map<MediaModel>(
+                                            (e) => MediaModel.fromJson(e, ''),
+                                          )
+                                          .toList()
+                                          .toList(),
+                                ),
+                              SizedBox(height: 80.h,)
+                            ],
+                          );
                     },
                   ),
                 ],

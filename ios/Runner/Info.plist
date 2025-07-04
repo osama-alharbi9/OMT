@@ -2,6 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
+	<!-- Google Sign-in -->
+	<key>GIDClientID</key>
+	<string>697432999713-hkjni7dnct7f7c7ia8s4us4b6p77190p.apps.googleusercontent.com</string>
+
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.697432999713-hkjni7dnct7f7c7ia8s4us4b6p77190p</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			</array>
+		</dict>
+	</array>
+
+	<!-- App Info -->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 
@@ -62,18 +86,8 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
-	<!-- Sign In with Apple support -->
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-			</array>
-		</dict>
-	</array>
-
 	<key>SignInWithApple</key>
 	<true/>
+
 </dict>
 </plist>

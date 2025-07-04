@@ -77,6 +77,30 @@ class ListProvider extends StateNotifier<Map<String, List<MediaModel>>> {
       return listState['favourites']!.any((item) => item.id == media.id);
     });
   }
+
+Future<Map<String, int>> getUserStats() async {
+  try {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('lists')
+        .doc(ref.read(authProvider)!.uid)
+        .get();
+
+    final data = snapshot.data() as Map<String, dynamic>;
+    final shows = (data['shows'] as List?)?.length ?? 0;
+    final movies = (data['movies'] as List?)?.length ?? 0;
+
+    return {
+      'shows': shows,
+      'movies': movies,
+    };
+  } catch (e) {
+    print('error getting user stats: $e');
+    return {
+      'shows': 0,
+    'movies': 0,
+    };
+  }
+}
 }
 
 final listProvider = StateNotifierProvider<ListProvider, Map<String, List<MediaModel>>>(
