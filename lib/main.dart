@@ -51,7 +51,3 @@ String get webApiKey => dotenv.env['WEB_API_KEY'] ?? 'WEB API KEY NOT FOUND';
 String get tmbdApiKey=>dotenv.env['TMBD_API_KEY']??'TMBD API KEY NOT FOUND';
 
 
-//Add Apple/Google/X Auth
-//Implement Adding/Removing from (favourite or wishlist)
-//Design Profile Page
-//Design Search Page

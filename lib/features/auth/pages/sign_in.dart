@@ -1,15 +1,11 @@
 
 import 'dart:io';
-import 'package:delightful_toast/delight_toast.dart';
-import 'package:delightful_toast/toast/components/toast_card.dart';
-import 'package:delightful_toast/toast/utils/enums.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:omt/core/common/helpers/helper_functions.dart';
 import 'package:omt/core/common/widgets/omt_button.dart';
 import 'package:omt/features/auth/providers/auth_provider.dart';
 import 'package:omt/features/auth/widgets/omt_text_field.dart';
@@ -28,15 +24,10 @@ class _SignInState extends ConsumerState<SignIn> {
   String password = '';
   bool isLoading = false;
   bool signUp=false;
-  bool obscureText=false;
+  bool obscureText=true;
 
 
-  final logosPath = [
-    if(Platform.isIOS)
-    'assets/images/apple.png',
-    'assets/images/google.png',
-    'assets/images/x.png',
-  ];
+
 
   Future<void> _submitForm() async {
     setState(() {
@@ -71,9 +62,20 @@ class _SignInState extends ConsumerState<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+          final authFunctionsProvider = ref.read(authProvider.notifier);
+
     final media = MediaQuery.of(context);
     final height = media.size.height;
     final width = media.size.width;
+      final Map<String,Function>logosPath = {
+    if(Platform.isIOS)
+    'assets/images/apple.png':(){
+      authFunctionsProvider.appleSignIn(context);
+    },
+    'assets/images/google.png':(){},
+    'assets/images/x.png':(){},
+  }
+  ;
 
     return Scaffold(
       body: SizedBox.expand(
@@ -144,7 +146,7 @@ class _SignInState extends ConsumerState<SignIn> {
                           }
                         },
                         suffixIcon: Icon(Icons.email),
-                        hintText: 'Enter your name',
+                        hintText: 'Enter your Email',
                         onSaved: (value) {
                           email = value;
                         },
@@ -215,18 +217,20 @@ class _SignInState extends ConsumerState<SignIn> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          for (final logo in logosPath) ...[
+                          for (final logo in logosPath.keys) ...[
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                                 vertical: 16,
                               ),
-                              child: CircleAvatar(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
-                                child: FittedBox(
-                                  fit: BoxFit.fitWidth,
-                                  child: Image.asset(logo, width: 25),
+                              child: GestureDetector(onTap: (){logosPath.values.first();},
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.onSurface.withOpacity(0.1),
+                                  child: FittedBox(
+                                    fit: BoxFit.fitWidth,
+                                    child: Image.asset(logo, width: 25.sp),
+                                  ),
                                 ),
                               ),
                             ),
@@ -257,7 +261,7 @@ class _SignInState extends ConsumerState<SignIn> {
                             ),
                           ],
                         ),
-                      ),
+                      ),SizedBox(height: 45.h,)
               ],
             ),
           ),
