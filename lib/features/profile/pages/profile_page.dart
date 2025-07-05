@@ -15,7 +15,7 @@ class ProfilePage extends ConsumerWidget {
     final authFunctionsProvider = ref.read(authProvider.notifier);
     final userLists = ref.watch(listProvider);
     List<Map<String, dynamic>> _stats = [
-      {'Episodes Watched': userLists['shows']?.length??0},
+      {'Episodes Watched': userLists['shows']?.length},
       {'Movies Watched': 120},
       {'Total Hours': 25235},
     ];

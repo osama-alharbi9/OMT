@@ -7,7 +7,6 @@ import 'package:omt/core/common/helpers/helper_functions.dart';
 import 'package:omt/features/discover/models/media_model.dart';
 import 'package:omt/features/discover/providers/cast_provider.dart';
 import 'package:omt/features/discover/providers/list_provider.dart';
-import 'package:omt/features/discover/providers/media_provider.dart';
 
 class MediaDetails extends ConsumerStatefulWidget {
   const MediaDetails({super.key, required this.media});
@@ -121,85 +120,83 @@ class _MediaDetailsState extends ConsumerState<MediaDetails> {
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 32.h),
-                      child: Text(
-                        widget.media.title,
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(widget.media.releaseDate),
-                    SizedBox(height: 16.h),
-                    longText(),
-                    SizedBox(height: 16.h),
-                    Text(
-                      'Tracking & Rating',
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 32.h),
+                    child: Text(
+                      widget.media.title,
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${widget.media.voteAverage.toStringAsFixed(1)}$emoji',
-                          style: Theme.of(context).textTheme.displayLarge,
-                        ),
-                        SizedBox(width: 8.w),
-                        Row(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.sp),
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.secondary.withOpacity(0.1),
-                              ),
-                              height: 60.sp,
-                              width: 60.sp,
-                              child: Icon(Icons.remove_red_eye, size: 40.sp),
-                            ),
-                            SizedBox(width: 8.w),
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.sp),
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.secondary.withOpacity(0.1),
-                              ),
-                              height: 60.sp,
-                              width: 60.sp,
-                              child: GestureDetector(
-                                onTap: () async{
-                                   ref
-                                      .read(listProvider.notifier)
-                                      .toggleFavourite(widget.media);
-                                },
-                                child: Icon(CupertinoIcons.heart, size: 40.sp),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(widget.media.releaseDate),
+                  SizedBox(height: 16.h),
+                  longText(),
+                  SizedBox(height: 16.h),
+                  Text(
+                    'Tracking & Rating',
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(height: 16.h),
-                    Text(
-                      'Cast',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontWeight: FontWeight.bold,
+                  ),
+                  SizedBox(height: 16.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${widget.media.voteAverage.toStringAsFixed(1)}$emoji',
+                        style: Theme.of(context).textTheme.displayLarge,
                       ),
+                      SizedBox(width: 8.w),
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.sp),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.secondary.withOpacity(0.1),
+                            ),
+                            height: 60.sp,
+                            width: 60.sp,
+                            child: Icon(Icons.remove_red_eye, size: 40.sp),
+                          ),
+                          SizedBox(width: 8.w),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.sp),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.secondary.withOpacity(0.1),
+                            ),
+                            height: 60.sp,
+                            width: 60.sp,
+                            child: GestureDetector(
+                              onTap: () async{
+                                 ref
+                                    .read(listProvider.notifier)
+                                    .toggleFavourite(widget.media);
+                              },
+                              child: Icon(CupertinoIcons.heart, size: 40.sp),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    'Cast',
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(height: 8.h),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 8.h),
+                ],
               ),
             ),
           ),
