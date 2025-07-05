@@ -4,12 +4,7 @@ import 'package:omt/features/auth/providers/auth_provider.dart';
 import 'package:omt/features/discover/models/media_model.dart';
 
 class ListProvider extends StateNotifier<Map<String, List<MediaModel>>> {
-  ListProvider(this.ref)
-      : super({
-          'favourites': [],
-          'movies': [],
-          'shows': [],
-        });
+  ListProvider(this.ref) : super({'favourites': [], 'movies': [], 'shows': []});
 
   final Ref ref;
   // Future <Map<String,dynamic>>getUserList()async{
@@ -38,11 +33,16 @@ class ListProvider extends StateNotifier<Map<String, List<MediaModel>>> {
 
         state = {
           ...state,
-          'favourites': state['favourites']!.where((item) => item.id != media.id).toList(),
+          'favourites':
+              state['favourites']!
+                  .where((item) => item.id != media.id)
+                  .toList(),
           if (media.mediaType == 'movie')
-            'movies': state['movies']!.where((item) => item.id != media.id).toList(),
+            'movies':
+                state['movies']!.where((item) => item.id != media.id).toList(),
           if (media.mediaType != 'movie')
-            'shows': state['shows']!.where((item) => item.id != media.id).toList(),
+            'shows':
+                state['shows']!.where((item) => item.id != media.id).toList(),
         };
       } else {
         await docRef.set({
@@ -58,8 +58,7 @@ class ListProvider extends StateNotifier<Map<String, List<MediaModel>>> {
           'favourites': [...state['favourites']!, media],
           if (media.mediaType == 'movie')
             'movies': [...state['movies']!, media],
-          if (media.mediaType != 'movie')
-            'shows': [...state['shows']!, media],
+          if (media.mediaType != 'movie') 'shows': [...state['shows']!, media],
         };
       }
     } catch (e) {
@@ -78,31 +77,39 @@ class ListProvider extends StateNotifier<Map<String, List<MediaModel>>> {
     });
   }
 
-Future<Map<String, int>> getUserStats() async {
-  try {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('lists')
-        .doc(ref.read(authProvider)!.uid)
-        .get();
+  Future<Map<String, int>> getUserStats() async {
+    try {
+      final snapshot =
+          await FirebaseFirestore.instance
+              .collection('lists')
+              .doc(ref.read(authProvider)!.uid)
+              .get();
 
-    final data = snapshot.data() as Map<String, dynamic>;
-    final shows = (data['shows'] as List?)?.length ?? 0;
-    final movies = (data['movies'] as List?)?.length ?? 0;
+      final data = snapshot.data() as Map<String, dynamic>;
+      final shows = (data['shows'] as List?)?.length ?? 0;
+      final movies = (data['movies'] as List?)?.length ?? 0;
 
-    return {
-      'shows': shows,
-      'movies': movies,
-    };
-  } catch (e) {
-    print('error getting user stats: $e');
-    return {
-      'shows': 0,
-    'movies': 0,
-    };
+      return {'shows': shows, 'movies': movies};
+    } catch (e) {
+      print('error getting user stats: $e');
+      return {'shows': 0, 'movies': 0};
+    }
   }
 }
-}
 
-final listProvider = StateNotifierProvider<ListProvider, Map<String, List<MediaModel>>>(
-  (ref) => ListProvider(ref),
-);
+final listProvider =
+    StateNotifierProvider<ListProvider, Map<String, List<MediaModel>>>(
+      (ref) => ListProvider(ref),
+    );
+
+final userListsProvider = StreamProvider.autoDispose<Map<String, dynamic>>((
+  ref,
+) {
+  final uid = ref.read(authProvider)!.uid;
+
+  return FirebaseFirestore.instance
+      .collection('lists')
+      .doc(uid)
+      .snapshots()
+      .map((snapshot) => snapshot.data() ?? {});
+});

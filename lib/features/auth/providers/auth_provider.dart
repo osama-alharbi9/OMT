@@ -130,18 +130,19 @@ final googleUser = await _googleSignIn.signIn();
     }
   }
 
-  Future<Map<String,List>> getUserLists() async {
+  Stream<Map<String,List>> getUserLists() async* {
     try {
       final userLists =
           await _dataBase.collection('lists').doc(_auth.currentUser!.uid).get();
       final data = userLists.data() ?? {'': []};
-      return data.map((key, value) => MapEntry(key, List<dynamic>.from(value)));
+      yield data.map((key, value) => MapEntry(key, List<dynamic>.from(value)));
     } catch (e) {
       print(e);
-      return {};
+      yield {};
     }
   }
-}
+    } 
+  
 
 final authProvider = StateNotifierProvider<AuthProvider, User?>(
   (ref) => AuthProvider(),

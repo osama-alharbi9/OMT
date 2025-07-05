@@ -18,7 +18,11 @@ class SearchPage extends StatelessWidget {
                     vertical: 64.h,
                   ),
                   child: TextField(
-                    decoration: InputDecoration(border: OutlineInputBorder(),prefixIcon: Icon(Icons.search),hintText: 'Search for movies or shows'),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'Search for movies or shows',
+                    ),
                   ),
                 ),
               ],
