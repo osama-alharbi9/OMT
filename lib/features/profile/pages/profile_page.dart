@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:omt/core/common/widgets/omt_button.dart';
 import 'package:omt/features/auth/providers/auth_provider.dart';
 import 'package:omt/features/discover/models/media_model.dart';
-import 'package:omt/features/discover/providers/list_provider.dart'; 
+import 'package:omt/features/discover/providers/list_provider.dart';
 import 'package:omt/features/discover/widgets/media_section.dart';
 
 class ProfilePage extends ConsumerWidget {
@@ -17,10 +19,21 @@ class ProfilePage extends ConsumerWidget {
     ];
   }
 
+  Future<void> _pickImage(BuildContext context, ImageSource source) async {
+    final picker = ImagePicker();
+    final image = await picker.pickImage(source: source);
+    if (image != null) {
+      debugPrint('📷 Picked image: ${image.path}');
+    }
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authFunctionsProvider = ref.read(authProvider.notifier);
-    final userListsAsync = ref.watch(userListsProvider); 
+    final user=ref.watch(authProvider);
+    final userListsAsync = ref.watch(userListsProvider);
+
 
     return Scaffold(
       body: CustomScrollView(
@@ -60,13 +73,56 @@ class ProfilePage extends ConsumerWidget {
                         padding: EdgeInsets.symmetric(horizontal: 16.w),
                         child: Row(
                           children: [
-                            CircleAvatar(radius: 35.r),
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(70.r),
+                              child: GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    useRootNavigator: true,
+                                    context: context,
+                                    builder: (e) => SizedBox(
+                                      width: double.infinity,
+                                      height: 200.h,
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 16.h,
+                                          horizontal: 16.w,
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            const Text('Change Profile Picture'),
+                                            SizedBox(height: 16.h),
+                                            OmtButton(
+                                              onPressed: () =>
+                                                  _pickImage(context, ImageSource.camera),
+                                              text: 'Take Photo',
+                                            ),
+                                            SizedBox(height: 8.h),
+                                            OmtButton(
+                                              onPressed: () =>
+                                                  _pickImage(context, ImageSource.gallery),
+                                              text: 'Upload from Gallery',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  radius: 35.r,
+                                  child: Image.network(
+                                    'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
+                                  ),
+                                ),
+                              ),
+                            ),
                             SizedBox(width: 8.w),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'John Smith',
+                                  user!.displayName??'Anonymous',
                                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                         fontSize: 20.sp,
                                         fontWeight: FontWeight.bold,
@@ -82,7 +138,10 @@ class ProfilePage extends ConsumerWidget {
                               ],
                             ),
                             const Spacer(),
-                            TextButton(onPressed: () {}, child: const Text('Edit')),
+                            TextButton(
+                              onPressed: () {},
+                              child: const Text('Edit'),
+                            ),
                           ],
                         ),
                       ),

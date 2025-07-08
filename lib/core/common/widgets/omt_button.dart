@@ -9,19 +9,21 @@ class OmtButton extends StatelessWidget {
     required this.text,
     this.color,
     this.isLoading = false,
+    this.radius=30
   });
   final Function() onPressed;
   final String text;
   final Color? color;
-  final isLoading;
+  final double radius;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     final buttonColor = color ?? Theme.of(context).colorScheme.primary;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: BorderRadius.circular(radius),
       child: SizedBox(
         height: 45.h,
-        width: double.infinity,
+        width: 60,
         child: CupertinoButton(
           padding: EdgeInsets.symmetric(vertical: 16),
           onPressed: onPressed,

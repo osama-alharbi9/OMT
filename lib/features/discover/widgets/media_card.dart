@@ -8,11 +8,9 @@ class MediaCard extends StatelessWidget {
   const MediaCard({
     super.key,
     required this.mediaItem,
-    required this.mediaName,
     required this.posterPath,
   });
   final MediaModel mediaItem;
-  final String mediaName;
   final String posterPath;
   @override
   Widget build(BuildContext context) {

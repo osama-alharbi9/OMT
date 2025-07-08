@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:omt/core/common/helpers/helper_functions.dart';
-import 'package:omt/features/discover/models/media_model.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthProvider extends StateNotifier<User?> {
@@ -28,6 +27,8 @@ class AuthProvider extends StateNotifier<User?> {
       showToast('signed');
       final userDoc =
           await _dataBase.collection('users').doc(_auth.currentUser!.uid).get();
+          final userData=userDoc.data();
+          state!.updateDisplayName(userData?['name']??'Anonymous');
       final userList =
           await _dataBase.collection('lists').doc(_auth.currentUser!.uid).get();
       print('signed in ');
@@ -112,6 +113,11 @@ final googleUser = await _googleSignIn.signIn();
           'movies': [],
           'watchlist': [],
         });
+        final userDoc =
+          await _dataBase.collection('users').doc(_auth.currentUser!.uid).get();
+          final userData=userDoc.data();
+                  state!.updateDisplayName(userData?['name']??'Anonymous');
+
         showToast('user created');
       }
     } on FirebaseAuthException catch (e) {

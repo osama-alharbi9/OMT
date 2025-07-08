@@ -19,7 +19,6 @@ class AllMedia extends StatelessWidget {
         itemBuilder: (context, index) {
           return MediaCard(
             mediaItem: media[index]!,
-            mediaName: media[index]!.title,
             posterPath: media[index]!.posterPath!,
           );
         },

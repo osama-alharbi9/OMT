@@ -54,7 +54,7 @@ class MediaSection extends StatelessWidget {
                 if (item == null) {
                 return const SizedBox.shrink();
                 }
-              return MediaCard(mediaItem: item, mediaName: item.title,posterPath: item.posterPath!,);
+              return MediaCard(mediaItem: item,posterPath: item.posterPath!,);
             },
           ),
         ),
