@@ -163,7 +163,12 @@ class _MediaDetailsState extends ConsumerState<MediaDetails> {
                             ),
                             height: 60.sp,
                             width: 60.sp,
-                            child: Icon(Icons.remove_red_eye, size: 40.sp),
+                            child: GestureDetector(onTap: (){
+                              ref
+                                    .read(listProvider.notifier)
+                                    .toggleWatchlist(widget.media);
+                            },
+                              child: Icon(Icons.remove_red_eye, size: 40.sp)),
                           ),
                           SizedBox(width: 8.w),
                           Container(

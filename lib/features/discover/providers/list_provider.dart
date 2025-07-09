@@ -62,7 +62,62 @@ class ListProvider extends StateNotifier<Map<String, List<MediaModel>>> {
         };
       }
     } catch (e) {
-      print('e');
+      print('error: $e');
+    }
+  }
+  Future<void> toggleWatchlist(MediaModel media) async {
+    final user = ref.read(authProvider);
+    if (user == null) return;
+
+    final docRef = FirebaseFirestore.instance.collection('lists').doc(user.uid);
+    final snapshot = await docRef.get();
+    final List<dynamic> favList = snapshot.data()?['watchlist'] ?? [];
+
+    final isInList = favList.any((item) => item['id'] == media.id);
+    final mediaJson = media.toJson()..remove('uid');
+
+    try {
+      if (isInList) {
+        await docRef.update({
+          'watchlist': FieldValue.arrayRemove([mediaJson]),
+          if (media.mediaType == 'movie')
+            'movies': FieldValue.arrayRemove([mediaJson]),
+          if (media.mediaType != 'movie')
+            'shows': FieldValue.arrayRemove([mediaJson]),
+        });
+
+        state = {
+          ...state,
+          'watchlist':
+              state['watchlist']!
+                  .where((item) => item.id != media.id)
+                  .toList(),
+          // if (media.mediaType == 'movie')
+          //   'movies':
+          //       state['movies']!.where((item) => item.id != media.id).toList(),
+          // if (media.mediaType != 'movie')
+          //   'shows':
+          //       state['shows']!.where((item) => item.id != media.id).toList(),
+        };
+      } else {
+        await docRef.set({
+          'watchlist': FieldValue.arrayUnion([mediaJson]),
+          // if (media.mediaType == 'movie')
+          //   'movies': FieldValue.arrayUnion([mediaJson]),
+          // if (media.mediaType != 'movie')
+          //   'shows': FieldValue.arrayUnion([mediaJson]),
+        }, SetOptions(merge: true));
+
+        state = {
+          ...state,
+          'watchlist': [...state['watchlist']!, media],
+          // if (media.mediaType == 'movie')
+          //   'movies': [...state['movies']!, media],
+          // if (media.mediaType != 'movie') 'shows': [...state['shows']!, media],
+        };
+      }
+    } catch (e) {
+      print('error $e');
     }
   }
 
