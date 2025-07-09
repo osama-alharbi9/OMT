@@ -18,6 +18,7 @@ class AuthProvider extends StateNotifier<User?> {
   final FirebaseAuth _auth;
  final FirebaseFirestore _dataBase;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  FirebaseAuth get auth=>_auth;
   FirebaseFirestore get dataBase=>_dataBase;
 
   Future<void> signIn(String name, String email, String password) async {

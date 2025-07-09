@@ -14,7 +14,6 @@ import 'package:omt/omt_navigator.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: 'assets/.env');
-
   try {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -49,5 +48,4 @@ String get androidApiKey =>
     dotenv.env['ANDROIDJ_API_KEY'] ?? 'ANDROID API KEY NOT FOUND';
 String get webApiKey => dotenv.env['WEB_API_KEY'] ?? 'WEB API KEY NOT FOUND';
 String get tmbdApiKey=>dotenv.env['TMBD_API_KEY']??'TMBD API KEY NOT FOUND';
-
-
+String get openAiApiKey=>dotenv.env['OPENAI_API_KEY']??'TMB API KEY NOT FOUND';

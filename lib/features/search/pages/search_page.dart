@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:omt/core/common/helpers/helper_functions.dart';
 import 'package:omt/features/discover/pages/media_details.dart';
+import 'package:omt/features/search/pages/omt_seggustion.dart';
 import 'package:omt/features/search/providers/search_provider.dart';
 
 class SearchPage extends ConsumerWidget {
@@ -43,9 +44,13 @@ class SearchPage extends ConsumerWidget {
                     height: 50.sp,
                     child: Padding(
                       padding: EdgeInsets.all(5.sp),
-                      child: SvgPicture.asset(
-                        'assets/images/Logo.svg',
-                        color: Theme.of(context).colorScheme.onPrimary,
+                      child: GestureDetector(onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (e)=>OmtSeggustion()));
+                      },
+                        child: SvgPicture.asset(
+                          'assets/images/Logo.svg',
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                       ),
                     ),
                   ),

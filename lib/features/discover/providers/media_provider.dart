@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:omt/features/discover/models/media_model.dart';
-import 'package:omt/features/discover/providers/dio_provider.dart';
+import 'package:omt/core/common/providers/dio_provider.dart';
 
 class MediaProvider extends StateNotifier<Map<String, List<MediaModel?>>> {
   MediaProvider(this.ref) : super({});
   final Ref ref;
 
   Future<void> fetchAllEndpoints() async {
-    final dio = ref.read(dioProvider);
+    final dio = ref.read(tmbdProvider);
 
     final response = await Future.wait([
       dio.get('trending/all/day'),

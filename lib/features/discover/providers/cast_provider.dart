@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:omt/features/discover/models/cast_model.dart';
-import 'package:omt/features/discover/providers/dio_provider.dart';
+import 'package:omt/core/common/providers/dio_provider.dart';
 
 class CastNotifier extends StateNotifier<Map<int, List<CastModel>>> {
   CastNotifier(this.ref) : super({});
   final Ref ref;
 
   Future<void> fetchCast(int mediaId, String mediaType) async {
-    final dio = ref.read(dioProvider);
+    final dio = ref.read(tmbdProvider);
     final response = await dio.get('$mediaType/$mediaId/credits');
 
     final List castJson = response.data['cast'];

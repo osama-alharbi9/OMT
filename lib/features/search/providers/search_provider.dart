@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:omt/features/discover/models/media_model.dart';
-import 'package:omt/features/discover/providers/dio_provider.dart';
+import 'package:omt/core/common/providers/dio_provider.dart';
 
 class SearchNotifier extends StateNotifier<AsyncValue<List<MediaModel>>> {
   final Ref ref; 
@@ -15,7 +15,7 @@ class SearchNotifier extends StateNotifier<AsyncValue<List<MediaModel>>> {
 
     state = const AsyncValue.loading();
     try {
-      final dio = ref.read(dioProvider);
+      final dio = ref.read(tmbdProvider);
 
       final res = await dio.get('search/multi', queryParameters: {
         'query': query,
