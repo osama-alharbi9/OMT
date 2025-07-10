@@ -23,7 +23,7 @@ class OmtButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(radius),
       child: SizedBox(
         height: 45.h,
-        width: 60,
+        width: double.infinity,
         child: CupertinoButton(
           padding: EdgeInsets.symmetric(vertical: 16),
           onPressed: onPressed,
